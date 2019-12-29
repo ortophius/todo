@@ -1,0 +1,25 @@
+{
+    "extends": [
+      "google",
+      "plugin:react/recommended"
+    ],
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es6": true,
+        "node": true
+      },
+      /* Fallback option "exmaFeatures".
+       * Newer versions of eslint uses this option
+       * only inside "parserOptions" section.
+       */
+      "ecmaFeatures": {
+        "jsx": true
+      },
+      "parserOptions": {
+        "ecmaFeatures": {
+          "jsx": true
+        },
+        "sourceType": "module"
+      }
+  }
