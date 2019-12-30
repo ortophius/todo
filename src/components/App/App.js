@@ -2,6 +2,7 @@ const React = require('react');
 const {Greeting} = require('../Greeting/Greeting');
 const {AddButton} = require('../AddButton/AddButton');
 const {Card} = require('../Card/Card');
+const {Row} = require('../Row/Row');
 
 /**
  * root class of the React application.
@@ -15,7 +16,10 @@ class App extends React.Component {
   */
   constructor(props) {
     super(props);
-    this.state = {empty: true};
+    this.state = {
+      empty: true,
+      rows: [],
+    };
   }
 
   /**
@@ -23,10 +27,11 @@ class App extends React.Component {
    */
   render() {
     const empty = this.state.empty;
-    const greeting = empty ? <Greeting /> : '';
+    const greeting = empty ? <Greeting /> : null;
     return (
       <div>
         <Card>
+          <Row title="test" />
         </Card>
         {greeting}
         <AddButton />
