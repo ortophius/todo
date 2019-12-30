@@ -130,3 +130,11 @@ html, body {
   font-family: 'Source Sans Pro', Arial, sans;
   font-size: 50px;
 }
+
+#todo-app {
+  display: flex;
+  width: 70vw;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+}

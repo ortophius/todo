@@ -1,0 +1,46 @@
+.row {
+  font-family: 'Source Sans pro', Arial, sans;
+  font-size: 24px;
+  border: 0px;
+  border-bottom: 1px solid red;
+  border-color: #d067dd;
+  width: 100%;
+  display: block;
+  padding: 0.5em 0 0.5em;
+
+  &-form {
+    margin: 0;
+    padding: 0;
+    width: 80%;
+  }
+
+  &-input {
+    @extend .row;
+    overflow: hidden;
+    resize: none;
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &-text {
+    @extend .row;
+    width: 80%;
+    overflow: hidden;
+  }
+
+  &-wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &-button {
+    cursor: pointer;
+    border: 0;
+    background: none;
+    &:focus {
+      outline: none;
+    }
+  }
+}

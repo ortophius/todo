@@ -1,4 +1,5 @@
 const React = require('react');
+const {PropTypes} = require('prop-types');
 const {Icon} = require('../Icon/Icon');
 require('./AddButton.scss');
 /**
@@ -19,9 +20,13 @@ export class AddButton extends React.Component {
    */
   render() {
     return (
-      <button className="add-button">
+      <button className="add-button" onClick={this.props.handler}>
         <Icon name="fas fa-plus" color="white" />
       </button>
     );
   }
 }
+
+AddButton.propTypes = {
+  handler: PropTypes.func,
+};

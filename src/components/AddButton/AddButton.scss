@@ -4,4 +4,8 @@
   background-color: #d067dd;
   padding: 15px;
   cursor: pointer;
+
+  &:focus {
+    outline: none;
+  }
 }
