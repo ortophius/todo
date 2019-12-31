@@ -22,4 +22,10 @@
   &-gray {
     color: #d8d8d8;
   }
+
+  &-rotated {
+    &-45{
+      transform: rotate(45deg);
+    }
+  }
 }

@@ -1,8 +1,10 @@
 const React = require('react');
+const {Panel} = require('../Panel/Panel');
 const {Greeting} = require('../Greeting/Greeting');
-const {AddButton} = require('../AddButton/AddButton');
 const {Card} = require('../Card/Card');
 const {Row} = require('../Row/Row');
+const {Button} = require('../Button/Button');
+require('./App.scss');
 
 /**
  * root class of the React application.
@@ -59,9 +61,7 @@ class App extends React.Component {
   removeRow(id) {
     console.log('remove');
     this.setState((state) => {
-      const rows = state.rows.filter((row) => row.id != id);
-
-      console.log(rows);
+      const rows = id === true ? [] : state.rows.filter((row) => row.id != id);
       return {
         rows,
       };
@@ -79,7 +79,7 @@ class App extends React.Component {
       const rows = state.rows.map((row) => {
         if (row.id == id) {
           row.title = title;
-          row.done = true;
+          row.done = done;
         }
         return row;
       });
@@ -100,6 +100,7 @@ class App extends React.Component {
         id={row.id}
         title={row.title}
         destroyHandler={this.removeRow}
+        done={row.done}
         changeHandler={this.editRow} />
     );
     return rows;
@@ -109,22 +110,20 @@ class App extends React.Component {
    * @return {*}
    */
   render() {
-    const addRow = this.addRow;
+    const removeAllRows = this.removeRow.bind(this, true);
     const length = this.state.rows.length;
-    const greeting = (length == 0) ? <Greeting /> : null;
-    const card = (length > 0) ?
-    <Card>
-      {this.getRows()}
-    </Card> :
-    null;
-    const handler = (e) => {
-      addRow();
-    };
+    const list = (length == 0) ?
+      <Greeting /> :
+      <div className="app">
+        <Panel onRemoveAll={removeAllRows} onShare={()=> true} />
+        <Card>
+          {this.getRows()}
+        </Card>;
+      </div>;
     return (
       <div>
-        {card}
-        {greeting}
-        <AddButton handler={handler}/>
+        {list}
+        <Button className="app-add-button" handler={this.addRow} />
       </div>
     );
   }

@@ -21,6 +21,7 @@ export class Row extends React.Component {
       edit: true,
     };
     this.input = React.createRef();
+    this.text = React.createRef();
     this.checkbox = React.createRef();
   }
 
@@ -71,8 +72,11 @@ export class Row extends React.Component {
    * @param {Event} e
    */
   onChange(e) {
-    const title = this.input.current.value;
-    this.props.changeHandler(this.props.id, title, true);
+    const title = this.input.current ?
+      this.input.current.value :
+      this.text.current.innerHTML;
+    const done = this.checkbox.current.checked;
+    this.props.changeHandler(this.props.id, title, done);
   }
 
   /**
@@ -81,6 +85,7 @@ export class Row extends React.Component {
   render() {
     const _ = this;
     const {title, done} = this.props;
+    console.log(done);
     const edit = this.state.edit;
     const editForm =
       <form
@@ -91,15 +96,15 @@ export class Row extends React.Component {
           ref={this.input}
           rows="1"
           type="text"
-          className="row-input"
+          className={'row-input' + (done ? ' row-input-done' : '')}
           onChange={this.onChange}
           value={title}/>
       </form>;
 
     const normalForm =
       <div
-        className='row-text'
-        ref={this.input}
+        className={'row-text' + (done ? ' row-text-done' : '')}
+        ref={this.text}
         onClick={this.startEdit}>
         {title}
       </div>;
@@ -108,7 +113,9 @@ export class Row extends React.Component {
       <input
         ref={this.checkbox}
         type="checkbox"
-        className="row-box"/>;
+        className="row-box"
+        onChange={this.onChange}
+        checked={done} />;
 
     return (
       <div className="row-wrap">

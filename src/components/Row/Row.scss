@@ -18,6 +18,11 @@
     @extend .row;
     overflow: hidden;
     resize: none;
+
+    &-done {
+      text-decoration: line-through;
+    }
+
     &:focus {
       outline: none;
     }
@@ -27,6 +32,10 @@
     @extend .row;
     width: 80%;
     overflow: hidden;
+
+    &-done {
+      text-decoration: line-through;
+    }
   }
 
   &-wrap {
