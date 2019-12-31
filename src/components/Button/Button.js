@@ -32,7 +32,7 @@ export class Button extends React.Component {
       <button
         className={`button button-${this.props.color} ${this.props.className}`}
         onClick={this.props.handler}>
-        <Icon name={this.props.icon} color="white" />
+        <Icon name={this.props.icon} color={this.props.iconColor} />
       </button>
     );
   }
@@ -41,11 +41,14 @@ export class Button extends React.Component {
 Button.propTypes = {
   handler: PropTypes.func,
   icon: PropTypes.string,
+  iconColor: PropTypes.string,
   color: PropTypes.string,
   className: PropTypes.string,
 };
 
 Button.defaultProps = {
+  className: '',
   color: 'purple',
+  iconColor: 'white',
 };
 

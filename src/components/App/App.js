@@ -59,7 +59,6 @@ class App extends React.Component {
    * @param {string} id
    */
   removeRow(id) {
-    console.log('remove');
     this.setState((state) => {
       const rows = id === true ? [] : state.rows.filter((row) => row.id != id);
       return {
@@ -118,7 +117,7 @@ class App extends React.Component {
         <Panel onRemoveAll={removeAllRows} onShare={()=> true} />
         <Card>
           {this.getRows()}
-        </Card>;
+        </Card>
       </div>;
     return (
       <div>

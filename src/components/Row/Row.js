@@ -1,7 +1,7 @@
 const React = require('react');
 const {PropTypes} = require('prop-types');
+const {Button} = require('../Button/Button');
 require('./Row.scss');
-const {Icon} = require('../Icon/Icon');
 /**
  * Row component
  * @class Row
@@ -15,14 +15,25 @@ export class Row extends React.Component {
     super(props);
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
+    this.onDrag = this.onDrag.bind(this);
     this.startEdit = this.startEdit.bind(this);
     this.destroy = this.destroy.bind(this);
     this.state = {
       edit: true,
+      dragged: false,
     };
     this.input = React.createRef();
     this.text = React.createRef();
     this.checkbox = React.createRef();
+    this.wrap = React.createRef();
+  }
+
+  /**
+   * Process drag phase of
+   * drag&drop event
+   */
+  onDrag() {
+    this.setState({dragged: true});
   }
 
   /**
@@ -85,7 +96,6 @@ export class Row extends React.Component {
   render() {
     const _ = this;
     const {title, done} = this.props;
-    console.log(done);
     const edit = this.state.edit;
     const editForm =
       <form
@@ -118,12 +128,24 @@ export class Row extends React.Component {
         checked={done} />;
 
     return (
-      <div className="row-wrap">
+      <div
+        ref={this.wrap}
+        className={
+          'row-wrap '+
+          (this.state.dragged ? 'row-wrap-dragged' : '')
+        }>
+        <Button
+          icon="fas fa-grip-vertical"
+          iconColor="gray"
+          color="white"
+          handler={this.onDrag} />
         {checkbox}
         {edit ? editForm : normalForm}
-        <button className="row-button" onClick={_.destroy}>
-          <Icon name="far fa-trash-alt" color="gray" />
-        </button>
+        <Button
+          icon="far fa-trash-alt"
+          color="white"
+          iconColor="gray"
+          handler={_.destroy} />
       </div>
     );
   }

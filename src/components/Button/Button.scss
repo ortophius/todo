@@ -7,6 +7,14 @@
     background-color: #d067dd;
   }
 
+  &-white {
+    background-color: #ffffff;
+  }
+
+  &-transparent {
+    background: none;
+  }
+
   &:focus {
     outline: none;
   }

@@ -7,6 +7,7 @@
   width: 100%;
   display: block;
   padding: 0.5em 0 0.5em;
+  cursor: text;
 
   &-form {
     margin: 0;
@@ -42,6 +43,13 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background-color: #ffffff;
+
+    &-dragged {
+      position: absolute;
+      opacity: 0.5;
+      width: 70vw;
+    }
   }
 
   &-button {
