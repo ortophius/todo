@@ -2,8 +2,7 @@
   font-family: 'Source Sans pro', Arial, sans;
   font-size: 24px;
   border: 0px;
-  border-bottom: 1px solid red;
-  border-color: #d067dd;
+  border-bottom: 1px solid #d067dd;
   width: 100%;
   display: block;
   padding: 0.5em 0 0.5em;
@@ -40,10 +39,12 @@
   }
 
   &-wrap {
+    box-sizing: border-box;
     display: flex;
     justify-content: space-between;
     align-items: center;
     background-color: #ffffff;
+    padding: 0 0.5em 0 0.5em;
 
     &-dragged {
       position: absolute;

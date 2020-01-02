@@ -1,6 +1,7 @@
 const React = require('react');
 const {PropTypes} = require('prop-types');
 const {Button} = require('../Button/Button');
+const {Icon} = require('../Icon/Icon');
 require('./Row.scss');
 /**
  * Row component
@@ -13,27 +14,24 @@ export class Row extends React.Component {
    */
   constructor(props) {
     super(props);
-    this.onSubmit = this.onSubmit.bind(this);
-    this.onChange = this.onChange.bind(this);
-    this.onDrag = this.onDrag.bind(this);
-    this.startEdit = this.startEdit.bind(this);
-    this.destroy = this.destroy.bind(this);
     this.state = {
       edit: true,
       dragged: false,
+      coords: {},
+      mouseOffset: {},
     };
+
+    this.onSubmit = this.onSubmit.bind(this);
+    this.onChange = this.onChange.bind(this);
+    this.onDrag = this.onDrag.bind(this);
+    this.onDragOver = this.onDragOver.bind(this);
+    this.startEdit = this.startEdit.bind(this);
+    this.destroy = this.destroy.bind(this);
     this.input = React.createRef();
     this.text = React.createRef();
     this.checkbox = React.createRef();
     this.wrap = React.createRef();
-  }
-
-  /**
-   * Process drag phase of
-   * drag&drop event
-   */
-  onDrag() {
-    this.setState({dragged: true});
+    this.grip = React.createRef();
   }
 
   /**
@@ -53,7 +51,44 @@ export class Row extends React.Component {
    * Check whether it is new row
    */
   componentDidMount() {
+    console.log(this.props);
     if (this.props.title == '') this.startEdit();
+    this.grip.current.addEventListener('dragstart', this.onDrag);
+    this.grip.current.addEventListener('dragend', this.props.onDragEnd);
+    this.wrap.current.addEventListener('dragover', this.onDragOver);
+  }
+
+  /**
+   * Process `dragstart` event
+   * @param {Event} e
+   */
+  onDrag(e) {
+    const rect = this.wrap.current.getBoundingClientRect();
+    const MOffset = {
+      x: e.pageX - rect.left,
+      y: e.pageY - rect.top,
+    };
+    e.dataTransfer.dropEffect = 'move';
+    e.dataTransfer.setData('text/html', this.wrap.current);
+    e.dataTransfer.setDragImage(this.wrap.current, MOffset.x, MOffset.y);
+
+    this.props.onDrag(this.props.id);
+  }
+
+  /**
+   * Process `dragover` event
+   * @param {Event} e
+   */
+  onDragOver(e) {
+    this.props.onDragOver(this.props.id);
+  }
+
+  /**
+   * remove existing listeners
+   */
+  componentWillUnmount() {
+    this.grip.current.removeEventListener('mousedown', this.onDrag);
+    document.removeEventListener('mousemove', this.onMove);
   }
 
   /**
@@ -97,6 +132,15 @@ export class Row extends React.Component {
     const _ = this;
     const {title, done} = this.props;
     const edit = this.state.edit;
+
+    const grip =
+      <div ref={this.grip}>
+        <Icon
+          name="fas fa-grip-vertical"
+          color="gray"
+          draggable={true} />
+      </div>;
+
     const editForm =
       <form
         className='row-form'
@@ -126,19 +170,12 @@ export class Row extends React.Component {
         className="row-box"
         onChange={this.onChange}
         checked={done} />;
-
     return (
       <div
         ref={this.wrap}
-        className={
-          'row-wrap '+
-          (this.state.dragged ? 'row-wrap-dragged' : '')
-        }>
-        <Button
-          icon="fas fa-grip-vertical"
-          iconColor="gray"
-          color="white"
-          handler={this.onDrag} />
+        className=
+          {'row-wrap '+ (this.state.dragged ? ' row-wrap-dragged' : '')}>
+        {grip}
         {checkbox}
         {edit ? editForm : normalForm}
         <Button
@@ -156,6 +193,9 @@ Row.propTypes = {
   title: PropTypes.string,
   edit: PropTypes.bool,
   done: PropTypes.bool,
+  onDrag: PropTypes.func,
+  onDragOver: PropTypes.func,
+  onDragEnd: PropTypes.func,
   changeHandler: PropTypes.func,
   destroyHandler: PropTypes.func,
   doneHandler: PropTypes.func,

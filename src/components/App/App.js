@@ -21,12 +21,16 @@ class App extends React.Component {
     this.state = {
       empty: true,
       rows: [],
+      draggedRow: null,
     };
 
     this.addRow = this.addRow.bind(this);
     this.getRows = this.getRows.bind(this);
     this.removeRow = this.removeRow.bind(this);
     this.editRow = this.editRow.bind(this);
+    this.onDrag = this.onDrag.bind(this);
+    this.onDragEnd = this.onDragEnd.bind(this);
+    this.onDragOver = this.onDragOver.bind(this);
   }
 
   /**
@@ -43,7 +47,6 @@ class App extends React.Component {
       const row = {
         id: id,
         title: title,
-        order: rows.length,
         done: false,
       };
       rows.push(row);
@@ -100,9 +103,52 @@ class App extends React.Component {
         title={row.title}
         destroyHandler={this.removeRow}
         done={row.done}
-        changeHandler={this.editRow} />
+        changeHandler={this.editRow}
+        onDrag={this.onDrag}
+        onDragEnd={this.onDragEnd}
+        onDragOver={this.onDragOver}/>
     );
     return rows;
+  }
+
+  /**
+   * Process `dragstart` event
+   * @param {string} id
+   */
+  onDrag(id) {
+    this.setState({draggedRow: id});
+  }
+
+  /**
+   * Process `dragend` event
+   */
+  onDragEnd() {
+    this.setState({draggedRow: null});
+  }
+
+  /**
+   * Process `dragover` event
+   * @param {string} id
+   */
+  onDragOver(id) {
+    this.setState((state) => {
+      if (id == state.draggedRow) return;
+      let oldIndex;
+      let newIndex;
+      const [...rows] = state.rows;
+
+      const draggedElement =
+        rows.filter((row, index) => {
+          if (row.id == this.state.draggedRow) {
+            oldIndex = index;
+            return row;
+          };
+          if (row.id == id) newIndex = index;
+        })[0];
+
+      console.log(oldIndex);
+      return {rows};
+    });
   }
 
   /**
