@@ -17,14 +17,13 @@ export class Row extends React.Component {
     this.state = {
       edit: true,
       dragged: false,
-      coords: {},
-      mouseOffset: {},
     };
 
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
     this.onDrag = this.onDrag.bind(this);
     this.onDragOver = this.onDragOver.bind(this);
+    this.onDragEnd = this.onDragEnd.bind(this);
     this.startEdit = this.startEdit.bind(this);
     this.destroy = this.destroy.bind(this);
     this.input = React.createRef();
@@ -51,10 +50,9 @@ export class Row extends React.Component {
    * Check whether it is new row
    */
   componentDidMount() {
-    console.log(this.props);
     if (this.props.title == '') this.startEdit();
     this.grip.current.addEventListener('dragstart', this.onDrag);
-    this.grip.current.addEventListener('dragend', this.props.onDragEnd);
+    this.grip.current.addEventListener('dragend', this.onDragEnd);
     this.wrap.current.addEventListener('dragover', this.onDragOver);
   }
 
@@ -72,6 +70,7 @@ export class Row extends React.Component {
     e.dataTransfer.setData('text/html', this.wrap.current);
     e.dataTransfer.setDragImage(this.wrap.current, MOffset.x, MOffset.y);
 
+    this.setState({dragged: true});
     this.props.onDrag(this.props.id);
   }
 
@@ -84,11 +83,21 @@ export class Row extends React.Component {
   }
 
   /**
+   * Process end of drag & drop event
+   * @param {Event} e
+   */
+  onDragEnd(e) {
+    this.setState({dragged: false});
+    this.props.onDragEnd();
+  }
+
+  /**
    * remove existing listeners
    */
   componentWillUnmount() {
-    this.grip.current.removeEventListener('mousedown', this.onDrag);
-    document.removeEventListener('mousemove', this.onMove);
+    this.grip.current.removeEventListener('dragstart', this.onDrag);
+    this.grip.current.removeEventListener('dragend', this.props.onDragEnd);
+    this.wrap.current.removeEventListener('dragover', this.onDragOver);
   }
 
   /**
@@ -174,7 +183,7 @@ export class Row extends React.Component {
       <div
         ref={this.wrap}
         className=
-          {'row-wrap '+ (this.state.dragged ? ' row-wrap-dragged' : '')}>
+          {'row-wrap'+ (this.state.dragged ? ' row-wrap-dragged' : '')}>
         {grip}
         {checkbox}
         {edit ? editForm : normalForm}

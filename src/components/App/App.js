@@ -137,16 +137,13 @@ class App extends React.Component {
       let newIndex;
       const [...rows] = state.rows;
 
-      const draggedElement =
-        rows.filter((row, index) => {
-          if (row.id == this.state.draggedRow) {
-            oldIndex = index;
-            return row;
-          };
-          if (row.id == id) newIndex = index;
-        })[0];
+      state.rows.forEach((row, index) => {
+        if (row.id == id) newIndex = index;
+        if (row.id == state.draggedRow) oldIndex = index;
+      });
 
-      console.log(oldIndex);
+      rows.splice(newIndex, 0, rows.splice(oldIndex, 1)[0]);
+
       return {rows};
     });
   }
