@@ -22,9 +22,6 @@ export class Panel extends React.Component {
     return (
       <div className="panel">
         <Button
-          icon="fas fa-link"
-          handler={this.props.onShare} />
-        <Button
           icon="fas fa-plus icon-rotated-45"
           handler={this.props.onRemoveAll} />
       </div>
@@ -34,5 +31,4 @@ export class Panel extends React.Component {
 
 Panel.propTypes = {
   onRemoveAll: PropTypes.func,
-  onShare: PropTypes.func,
 };
